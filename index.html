@@ -10,13 +10,56 @@
 <body>
 
     <div class="search">
-        <form action="">
+        <form class="search__form" id="search-form" autocomplete="off">
             <input class="search__input" placeholder="Input any text..."
-                   type="search" value="" name="search" id="search">
+                   type="text" value="" name="search" id="search">
 
-            <input class="search__submit" type="submit" value="">
+            <input class="search__submit" type="submit" value="Search" disabled>
 
             <span class="search__icon"></span>
+
+            <div class="search__wrapper search__wrapper--closed">
+
+                <ul class="search__dropdown">
+                    <li class="search__dropdown-item">
+                        <a href="" class="search__url" data-suggestion="Phrase Overview">
+                            <span class="search__value"></span>
+
+                            <div class="search__hint">
+                                in
+                                <span class="search__overview"></span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li class="search__dropdown-item">
+                        <a href="" class="search__url" data-suggestion="Domain Overview">
+                            <span class="search__value"></span>
+
+                            <div class="search__hint">
+                                in
+                                <span class="search__overview"></span>
+                            </div>
+                        </a>
+
+
+                    </li>
+
+                    <li class="search__dropdown-item">
+                        <a href="" class="search__url" data-suggestion="URL Overview">
+                            <span class="search__value"></span>
+
+                            <div class="search__hint">
+                                in
+                                <span class="search__overview"></span>
+                            </div>
+                        </a>
+
+
+                    </li>
+                </ul>
+
+            </div>
 
         </form>
     </div>

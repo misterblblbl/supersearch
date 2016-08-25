@@ -26,9 +26,8 @@ var SuperSearch = function(element) {
     this._throttleInput = this._throttleInput.bind(this);
 
     this.element.addEventListener('input', this._onSearchInput);
-    // this.input.addEventListener('input', this._onSearchInput);
     this.element.addEventListener('click', this._onCrossClick);
-    this.submit.addEventListener('submit', this._onSubmit);
+    this.element.addEventListener('submit', this._onSubmit);
 };
 
 SuperSearch.prototype._throttleInput = function(callback) {
@@ -52,33 +51,36 @@ SuperSearch.prototype._createUrl = function(suggestionType, query) {
 
 SuperSearch.prototype._onSearchInput = function(evt) {
     evt.preventDefault();
-    console.log('input');
     if(Date.now() - this.lastCall >= this.throttleDelay) {
-        this.lastCall = Date.now();
-        console.log(Date.now() - this.lastCall);
         if(this.input.value) {
+            this.lastCall = Date.now();
             this.icon.classList.add('search__icon--visible');
             this.submit.disabled = false;
 
-            this._onUrlInput(this._inputIsUrl(this.input.value), this.input.value);
+            var isUrl = this._inputIsUrl(this.input.value);
+            if(isUrl) {
+                this._onUrlInput(this.input.value);
+            } else {
+                this.dropDown.classList.add('search__wrapper--closed');
+            }
+        } else if (!this.input.value) {
+            this.icon.classList.remove('search__icon--visible');
         }
     }
 };
 
-SuperSearch.prototype._onUrlInput = function(isUrl, url) {
-    if(isUrl) {
-        this.dropDown.classList.remove('search__wrapper--closed');
-        for(var i = 0; i < this.url.length; i++) {
-            var suggestion = this.url[i].dataset.suggestion;
+SuperSearch.prototype._onUrlInput = function(url) {
+    this.dropDown.classList.remove('search__wrapper--closed');
+    for(var i = 0; i < this.url.length; i++) {
+        var suggestion = this.url[i].dataset.suggestion;
 
-            var suggestionType = (suggestion.substring(0, suggestion.indexOf(' '))
-                + suggestion.substring(suggestion.indexOf(' ') + 1, suggestion.length)).toLowerCase();
+        var suggestionType = (suggestion.substring(0, suggestion.indexOf(' '))
+        + suggestion.substring(suggestion.indexOf(' ') + 1, suggestion.length)).toLowerCase();
 
-            this.url[i].querySelector('.search__overview').innerHTML = suggestion;
+        this.url[i].querySelector('.search__overview').innerHTML = suggestion;
 
-            this.url[i].querySelector('.search__value').textContent = this._parseUrl(url)[i];
-            this.url[i].href = this._createUrl(suggestionType, this._parseUrl(url)[i]);
-        }
+        this.url[i].querySelector('.search__value').textContent = this._parseUrl(url)[i];
+        this.url[i].href = this._createUrl(suggestionType, this._parseUrl(url)[i]);
     }
 };
 

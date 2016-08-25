@@ -17,7 +17,6 @@ body {
     margin-top: 100px;
 }
 
-
 .search__form {
     width: 75%;
     position: relative;
@@ -58,7 +57,7 @@ body {
     background-image: url(../img/icon-cross.svg);
     background-repeat: no-repeat;
     background-size: cover;
-    z-index: 10;
+    z-index: 9;
 }
 
 .search__input:focus {
@@ -124,16 +123,8 @@ input[type="search"] {
 }
 
 .search__url {
-    display: block;
-    white-space: nowrap;
-    vertical-align: top;
-    position: relative;
+    display: flex;
 
-    width: auto;
-    margin-right: auto;
-    text-overflow: clip;
-
-    text-align: left;
     padding: 12px;
 
     font-family: "Ubuntu Bold", "Arial", sans-serif;
@@ -145,19 +136,26 @@ input[type="search"] {
     text-decoration: none;
 }
 
+.search__url:hover {
+    background-color: #f6f6f6;
+}
+
 .search__url::after {
 
+}
+
+.search__value {
+    flex-shrink: 1;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .search__hint {
     display: inline-block;
     vertical-align: top;
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: 10;
+    white-space: nowrap;
+    position: relative;
 
-    padding-right: 15px;
     padding-left: 5px;
     background-color: #FFFFFF;
 
@@ -165,22 +163,28 @@ input[type="search"] {
     font-weight: 400;
     font-style: normal;
     font-size: 13px;
-    line-height: 39px;
+    line-height: 15px;
     color: #343434;
     text-decoration: none;
 }
 
-.search__hint::before {
-    content: ''; /* Выводим элемент */
-    position: absolute; /* Абсолютное позиционирование */
-    left: -10px;
-    top: 0; /* Положение элемента */
-    width: 15px; /* Ширина градиента*/
-    height: 100%; /* Высота родителя */
-    /* Градиент */
-    background: linear-gradient(to left, #FFFFFF, rgba(255, 255, 255, 0) 100%);
-}
-
 .search__overview {
     color: #2b94e2;
+}
+
+.search__value--fade {
+    height: 3.5em;
+    overflow: hidden;
+    position: relative;
+}
+
+.search__value--fade:before {
+     content: "";
+     text-align: right;
+     position: absolute;
+     right: 0;
+     width: 35px;
+     height: 1.2em;
+     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+     pointer-events: none;
 }

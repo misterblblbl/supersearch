@@ -23,7 +23,6 @@ var SuperSearch = function(element) {
     this._onUrlInput = this._onUrlInput.bind(this);
     this._parseUrl = this._parseUrl.bind(this);
     this._createUrl = this._createUrl.bind(this);
-    this._throttleInput = this._throttleInput.bind(this);
 
     //Обработчик ввода
     this.element.addEventListener('input', this._onSearchInput);
@@ -36,17 +35,22 @@ var SuperSearch = function(element) {
 };
 
 
-//Парсит переданный url, возвращая массив с полным url, доменным именем и url без протокола
+//Рапарсить переданный url, возвращая массив с полным url, доменным именем и url без протокола
 SuperSearch.prototype._parseUrl = function(href) {
     var location = document.createElement("a");
     location.href = href;
     return [location.href, location.hostname, location.hostname + location.pathname];
 };
 
-//Проверка является ли введенный текст ссылкой
+//Проверить является ли введенный текст ссылкой
 SuperSearch.prototype._inputIsUrl = function(userInput) {
     var result = userInput.match(this.pattern);
     return result !== null;
+};
+
+//Проверить элемент на переполнение
+SuperSearch.prototype._isOverFlowed = function(element) {
+    return element.scrollWidth > element.clientWidth;
 };
 
 //Создать адреса подсказок
@@ -87,6 +91,10 @@ SuperSearch.prototype._onUrlInput = function(url) {
         this.url[i].querySelector('.search__overview').innerHTML = suggestion;
 
         this.url[i].querySelector('.search__value').textContent = this._parseUrl(url)[i];
+        if(this._isOverFlowed(this.url[i].querySelector('.search__value'))) {
+            this.url[i].querySelector('.search__value').classList.add('search__value--fade');
+        }
+
         this.url[i].href = this._createUrl(suggestionType, this._parseUrl(url)[i]);
     }
 };
@@ -112,6 +120,7 @@ SuperSearch.prototype._onSubmit = function() {
         xhr.send(body);
     }
 };
+
 
 var forms = document.querySelectorAll('.search__form');
 

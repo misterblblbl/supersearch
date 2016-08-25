@@ -1,9 +1,9 @@
 'use strict';
 
-var searchInput = document.querySelector('.search__input');
-var searchIconCross = document.querySelector('.search__icon');
-var form = document.querySelector('.search__form');
-
+/**
+ * @param {HTMLElement} element - Элемент, в котором создается строка поиска
+ * @constructor
+ */
 var SuperSearch = function(element) {
     this.element = element;
     this.input = element.querySelector('.search__input');
@@ -25,30 +25,36 @@ var SuperSearch = function(element) {
     this._createUrl = this._createUrl.bind(this);
     this._throttleInput = this._throttleInput.bind(this);
 
+    //Обработчик ввода
     this.element.addEventListener('input', this._onSearchInput);
+
+    //Обработчик события по клику на крестик
     this.element.addEventListener('click', this._onCrossClick);
+
+    //Обработчик отправки формы
     this.element.addEventListener('submit', this._onSubmit);
 };
 
-SuperSearch.prototype._throttleInput = function(callback) {
 
-};
-
+//Парсит переданный url, возвращая массив с полным url, доменным именем и url без протокола
 SuperSearch.prototype._parseUrl = function(href) {
     var location = document.createElement("a");
     location.href = href;
     return [location.href, location.hostname, location.hostname + location.pathname];
 };
 
+//Проверка является ли введенный текст ссылкой
 SuperSearch.prototype._inputIsUrl = function(userInput) {
     var result = userInput.match(this.pattern);
     return result !== null;
 };
 
+//Создать адреса подсказок
 SuperSearch.prototype._createUrl = function(suggestionType, query) {
     return this.address + '?' + 'suggestiontype=' + suggestionType + '&query=' + query;
 };
 
+//Проверять поле ввода с задержкой throttleDelay при любом вводе
 SuperSearch.prototype._onSearchInput = function(evt) {
     evt.preventDefault();
     if(Date.now() - this.lastCall >= this.throttleDelay) {
@@ -69,6 +75,7 @@ SuperSearch.prototype._onSearchInput = function(evt) {
     }
 };
 
+//Если введенный текст является ссылкой — вывести подсказки
 SuperSearch.prototype._onUrlInput = function(url) {
     this.dropDown.classList.remove('search__wrapper--closed');
     for(var i = 0; i < this.url.length; i++) {
@@ -84,6 +91,7 @@ SuperSearch.prototype._onUrlInput = function(url) {
     }
 };
 
+//Удалить текст из поля ввода при нажатии на крестик
 SuperSearch.prototype._onCrossClick = function(evt) {
     if(evt.target === this.icon) {
         this.input.value = '';
@@ -92,16 +100,22 @@ SuperSearch.prototype._onCrossClick = function(evt) {
     }
 };
 
+//Создать POST-запрос для отправки формы
 SuperSearch.prototype._onSubmit = function() {
     if(this.input.value) {
         var xhr = new XMLHttpRequest();
         var body = 'formId=' + encodeURIComponent(this.element.id)
             + '&query=' + encodeURIComponent(this.input.value);
-        xhr.open("POST", this.address, true);
+        xhr.open("POST", this.address, false);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         xhr.send(body);
     }
 };
 
-var mySearch = new SuperSearch(form);
+var forms = document.querySelectorAll('.search__form');
+
+for(var i=0; i < forms.length; i++) {
+    new SuperSearch(forms[i]);
+}
+

@@ -126,6 +126,9 @@ input[type="search"] {
     display: flex;
 
     padding: 12px;
+    max-height: 39px;
+    box-sizing: border-box;
+    overflow: hidden;
 
     font-family: "Ubuntu Bold", "Arial", sans-serif;
     font-weight: 700;
@@ -138,10 +141,6 @@ input[type="search"] {
 
 .search__url:hover {
     background-color: #f6f6f6;
-}
-
-.search__url::after {
-
 }
 
 .search__value {
@@ -157,7 +156,6 @@ input[type="search"] {
     position: relative;
 
     padding-left: 5px;
-    background-color: #FFFFFF;
 
     font-family: "Ubuntu Regular", "Arial", sans-serif;
     font-weight: 400;
@@ -187,4 +185,8 @@ input[type="search"] {
      height: 1.2em;
      background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
      pointer-events: none;
+}
+
+.search__url:hover .search__value--fade:before {
+    background: linear-gradient(to right, rgba(246, 246, 246, 0), rgba(246, 246, 246, 1));
 }

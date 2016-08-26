@@ -23,6 +23,8 @@ var SuperSearch = function(element) {
     this._onUrlInput = this._onUrlInput.bind(this);
     this._parseUrl = this._parseUrl.bind(this);
     this._createUrl = this._createUrl.bind(this);
+    this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
+    this._onBlur = this._onBlur.bind(this);
 
     //Обработчик ввода
     this.element.addEventListener('input', this._onSearchInput);
@@ -32,6 +34,12 @@ var SuperSearch = function(element) {
 
     //Обработчик отправки формы
     this.element.addEventListener('submit', this._onSubmit);
+
+    //Закрытие всплывающих подсказок по ECS
+    document.addEventListener('keydown', this._onDocumentKeyDown);
+
+    //Обработчик отправки формы
+    this.input.addEventListener('blur', this._onBlur);
 };
 
 
@@ -75,6 +83,7 @@ SuperSearch.prototype._onSearchInput = function(evt) {
             }
         } else if (!this.input.value) {
             this.icon.classList.remove('search__icon--visible');
+            this.dropDown.classList.add('search__wrapper--closed');
         }
     }
 };
@@ -121,6 +130,19 @@ SuperSearch.prototype._onSubmit = function() {
     }
 };
 
+//Закрыть выпадашку, если поле ввода не в фокусе
+SuperSearch.prototype._onDocumentKeyDown = function(evt) {
+    if(evt.keyCode === 27 && evt.target === this.input) {
+        this.dropDown.classList.add('search__wrapper--closed');
+        this.input.value = '';
+    }
+};
+
+SuperSearch.prototype._onBlur = function() {
+    if(!this.dropDown.classList.contains('search__wrapper--closed')) {
+        this.dropDown.classList.add('search__wrapper--closed');
+    }
+};
 
 var forms = document.querySelectorAll('.search__form');
 
